@@ -59,6 +59,25 @@ A Django-based library reservation system that manages book reservations with au
    python manage.py runserver
    ```
 
+## Optional: Docker Setup
+
+If you prefer to run the project in Docker, follow these steps:
+
+1. **Build and start the containers**
+   ```powershell
+   docker-compose up --build
+   ```
+
+2. **Access the app**
+   - Open your browser and go to: `http://localhost:8000`
+
+3. **Stop the containers**
+   ```powershell
+   docker-compose down
+   ```
+
+*Note: The app uses SQLite3 for the database, so your data is stored in the `db.sqlite3` file in your project directory.*
+
 ## Usage
 
 ### Admin Interface
@@ -85,7 +104,26 @@ python manage.py expire_reservations
 python manage.py expire_reservations --dry-run
 ```
 
-### API Endpoints
+## Automated Cron Job
+
+A cron job is also configured in `settings.py` to automatically run the `expire_reservations` command every day at midnight.
+
+To manage cron jobs, use:
+
+```bash
+# Register the cron jobs
+python manage.py crontab add     
+
+# List active cron jobs
+python manage.py crontab show    
+
+# Remove all registered cron jobs
+python manage.py crontab remove   
+```
+
+This ensures expired reservations are cancelled and queued reservations are promoted without manual intervention.
+
+## API Endpoints
 - `GET /api/books/` - List all books
 - `GET /api/books/available/` - List only available books
 - `GET /api/reservations/` - List all reservations
